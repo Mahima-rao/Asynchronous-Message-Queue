@@ -20,37 +20,37 @@ This solution consists of:
 ## Installation
 
 1. **Clone the repository**:
-   git clone https://github.com/yourusername/stryker-assignment.git
-   cd stryker-assignment
+   - git clone https://github.com/yourusername/stryker-assignment.git
+   - cd stryker-assignment
 2. **Create a virtual environment**:
-   .\venv\Scripts\activate
+   - .\venv\Scripts\activate
 3. **Activate the virtual environment**:
-   .\venv\Scripts\activate
+   - .\venv\Scripts\activate
 4. **Install depencies**:
-   pip install -r requirements.txt
+   - pip install -r requirements.txt
 
 ## Running the solution:
-   python setup_and_run.py
+   - python setup_and_run.py
 
 **This script will**:
-Set up the environment.
-Install dependencies.
-Start Service A on port 8000 and Service B on port 8001.
-Service A will be available at http://127.0.0.1:8000.
-Service B will be available at http://127.0.0.1:8001.
+1. Set up the environment.
+2. Install dependencies.
+3. Start Service A on port 8000 and Service B on port 8001.
+4. Service A will be available at http://127.0.0.1:8000.
+5. Service B will be available at http://127.0.0.1:8001.
 
 **Service A - Endpoint**:
-POST /service_a/publish/
+- POST /service_a/publish/
 
 **Service B**:
-Listens to the shared queue and processes messages in the background.
+- Listens to the shared queue and processes messages in the background.
 
 ## Testing:
  **Run unit tests**:
- pytest tests/
+ - pytest tests/
 
 **This will run the tests for**:
-The message queue (publish and subscribe functionality).
-Service A (publishing messages).
-Service B (subscribing and processing messages).
+1. The message queue (publish and subscribe functionality).
+2. Service A (publishing messages).
+3. Service B (subscribing and processing messages).
 
