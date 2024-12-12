@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from typing import Any, Callable, Optional
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -10,29 +9,31 @@ class AsyncMessageQueue:
         """Initialize the asynchronous in-memory queue."""
         self.queue = asyncio.Queue(max_size)
 
-    async def publish(self, message: Any):
+    async def publish(self, message: str):
         """Publish a message to the in-memory queue."""
         await self.queue.put(message)
         logging.debug(f"Message '{message}' added to the queue.")
 
-    async def subscribe(self, handler: Callable[[Any], None], retry_attempts: int = 3, retry_delay: int = 2):
+    async def subscribe(self, handler):
         """Subscribe to the in-memory queue and process messages using the handler."""
+        logging.debug("Starting subscription...")
         while True:
-            message = await self.queue.get()
-            attempt = 0
-            success = False
-            while attempt < retry_attempts and not success:
-                try:
-                    await handler(message)
-                    logging.debug(f"Message '{message}' processed successfully.")
-                    success = True
-                except Exception as e:
-                    attempt += 1
-                    logging.error(f"Error processing message: {e}. Retrying {attempt}/{retry_attempts}...")
-                    await asyncio.sleep(retry_delay)
-                finally:
-                    self.queue.task_done()
+            try:
+                # Get the next message from the queue
+                message = await self.queue.get()
+                logging.debug(f"Message '{message}' retrieved from the queue.")
 
-    async def consume(self) -> Any:
-        """Consume a message from the queue."""
-        return await self.queue.get()
+                # Process the message using the provided handler
+                await handler(message)
+
+                # Mark the task as done
+                self.queue.task_done()
+                logging.debug(f"Message '{message}' processed successfully.")
+            except asyncio.CancelledError:
+                logging.debug("Subscription task cancelled.")
+                break
+            except Exception as e:
+                logging.error(f"Error while processing message: {e}")
+
+# Create a shared queue instance
+shared_queue = AsyncMessageQueue()
