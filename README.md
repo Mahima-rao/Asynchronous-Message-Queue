@@ -20,7 +20,7 @@ This solution consists of:
 ## Installation
 
 1. **Clone the repository**:
-   - git clone https://github.com/yourusername/stryker-assignment.git
+   - git clone https://github.com/Mahima-rao/stryker.git
    - cd stryker-assignment
 2. **Create a virtual environment**:
    - .\venv\Scripts\activate
