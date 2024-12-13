@@ -1,34 +1,29 @@
 import asyncio
 import logging
+from redis.asyncio import Redis
 
-# Set up logging
 logging.basicConfig(level=logging.DEBUG)
 
-class AsyncMessageQueue:
-    def __init__(self, max_size: int = 100):
-        """Initialize the asynchronous in-memory queue."""
-        self.queue = asyncio.Queue(max_size)
+class RedisMessageQueue:
+    def __init__(self, redis_url="redis://localhost:6379", queue_name="shared_queue"):
+        self.redis_url = redis_url
+        self.queue_name = queue_name
+        self.redis = Redis.from_url(redis_url)
 
     async def publish(self, message: str):
-        """Publish a message to the in-memory queue."""
-        await self.queue.put(message)
-        logging.debug(f"Message '{message}' added to the queue.")
+        """Publish a message to the Redis queue."""
+        await self.redis.rpush(self.queue_name, message)
+        logging.debug(f"Message '{message}' added to the Redis queue.")
 
     async def subscribe(self, handler):
-        """Subscribe to the in-memory queue and process messages using the handler."""
-        logging.debug("Starting subscription...")
+        """Subscribe to the Redis queue and process messages."""
+        logging.debug("Starting subscription to Redis queue...")
         while True:
             try:
-                # Get the next message from the queue
-                message = await self.queue.get()
-                logging.debug(f"Message '{message}' retrieved from the queue.")
-
-                # Process the message using the provided handler
-                await handler(message)
-
-                # Mark the task as done
-                self.queue.task_done()
-                logging.debug(f"Message '{message}' processed successfully.")
+                # Blocking pop to wait for new messages
+                message = await self.redis.blpop(self.queue_name)
+                if message:
+                    await handler(message[1].decode("utf-8"))
             except asyncio.CancelledError:
                 logging.debug("Subscription task cancelled.")
                 break
@@ -36,4 +31,4 @@ class AsyncMessageQueue:
                 logging.error(f"Error while processing message: {e}")
 
 # Create a shared queue instance
-shared_queue = AsyncMessageQueue()
+shared_queue = RedisMessageQueue()
