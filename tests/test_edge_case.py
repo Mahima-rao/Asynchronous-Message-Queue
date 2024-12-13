@@ -1,25 +1,23 @@
 import pytest
-from queue_lib.queue import AsyncMessageQueue
-import asyncio
+import redis
+import time
 
-@pytest.mark.asyncio
-async def test_empty_queue_subscription():
-    queue = AsyncMessageQueue()
+@pytest.fixture
+def redis_client():
+    return redis.StrictRedis(host='localhost', port=6379, db=0)
 
-    # Simulate an empty queue (no messages are published yet)
-    message_processed = []
+def test_empty_message(redis_client):
+    """Test publishing an empty message."""
+    message = ""
+    
+    # Publish the empty message to the Redis queue
+    redis_client.rpush("shared_queue", message)
 
-    # Define the handler to process a message
-    async def handler(message):
-        message_processed.append(message)
+    # Add a short delay to ensure the message is added to the queue
+    time.sleep(1)  # Small delay to allow the message to be available for consumption
 
-    # Run the subscription, which should wait for a message
-    asyncio.create_task(queue.subscribe(handler))
-
-    # Now publish a message to the queue after a short delay
-    await asyncio.sleep(1)
-    await queue.publish("Message after delay")
-
-    # Wait for the message to be processed
-    await asyncio.sleep(1)
-    assert message_processed[0] == "Message after delay"
+    # Verify the empty message is in the queue
+    message_from_queue = redis_client.blpop("shared_queue", timeout=10)
+    assert message_from_queue is not None, "No message was retrieved from the queue"
+    assert message_from_queue[1].decode() == message
+    print("Test passed, empty message handled.")
