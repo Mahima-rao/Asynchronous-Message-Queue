@@ -12,7 +12,7 @@ This repository contains a solution for the Stryker technical challenge. It impl
 ## Overview
 
 This solution consists of:
-1. **A Message Queue Abstraction Library** that implements an asynchronous message queue using `asyncio.Queue`.
+1. **A Message Queue Abstraction Library**  Implements an asynchronous message queue using `asyncio.Queue` for in-memory message exchange. Redis is used for queue management in production scenarios, providing persistent, distributed queuing.
 2. **Service A** that publishes messages to the shared message queue.
 3. **Service B** that subscribes to the queue and processes the messages.
 4. A **setup script** to automate the setup and execution of both services.
@@ -44,6 +44,13 @@ This solution consists of:
 
 **Service B**:
 - Listens to the shared queue and processes messages in the background.
+
+## Redis Server Setup:
+- In order for the services to interact via the message queue, Redis must be running locally.
+**Steps to Start Redis**:
+- Download the Redis Windows version from [here](https://github.com/microsoftarchive/redis/releases). 
+- Start Redis server:
+   - redis-server
 
 ## Testing:
  **Run unit tests**:
