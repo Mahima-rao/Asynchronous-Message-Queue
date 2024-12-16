@@ -1,9 +1,17 @@
 import pytest
 from fastapi.testclient import TestClient
 from service_a.main import app
+import redis
 
 @pytest.fixture
-def client():
+def redis_client():
+    """Fixture to create a Redis client and clear the Redis database before each test."""
+    client = redis.StrictRedis(host='localhost', port=6379, db=0)
+    client.flushdb()  # Clear the entire Redis database to ensure no leftover messages
+    return client
+
+@pytest.fixture
+def client(redis_client):  # Use the redis_client fixture that flushes the DB
     return TestClient(app)
 
 def test_publish_message(client):

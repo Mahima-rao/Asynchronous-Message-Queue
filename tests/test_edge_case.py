@@ -4,17 +4,20 @@ import time
 
 @pytest.fixture
 def redis_client():
-    return redis.StrictRedis(host='localhost', port=6379, db=0)
+    """Fixture to create a Redis client and clear the Redis database before each test."""
+    client = redis.StrictRedis(host='localhost', port=6379, db=0)
+    client.flushdb()  # Clear the entire Redis database to ensure no leftover messages
+    return client
 
 def test_empty_message(redis_client):
-    """Test publishing an empty message."""
+    """Test publishing an empty message to the Redis queue."""
     message = ""
     
     # Publish the empty message to the Redis queue
     redis_client.rpush("shared_queue", message)
 
     # Add a short delay to ensure the message is added to the queue
-    time.sleep(1)  # Small delay to allow the message to be available for consumption
+    time.sleep(1)
 
     # Verify the empty message is in the queue
     message_from_queue = redis_client.blpop("shared_queue", timeout=10)
