@@ -12,7 +12,7 @@ This repository contains a solution for the Stryker technical challenge. It impl
 ## Overview
 
 This solution consists of:
-1. **A Message Queue Abstraction Library**  Implements an asynchronous message queue using `asyncio.Queue` for in-memory message exchange. Redis is used for queue management in production scenarios, providing persistent, distributed queuing.
+1. **A Message Queue Abstraction Library**  A Message Queue Abstraction Library that uses Redis for queue management, providing a persistent, distributed queuing system. It ensures scalability, fault tolerance, and seamless integration with asynchronous applications
 2. **Service A** that publishes messages to the shared message queue.
 3. **Service B** that subscribes to the queue and processes the messages.
 4. A **setup script** to automate the setup and execution of both services.
