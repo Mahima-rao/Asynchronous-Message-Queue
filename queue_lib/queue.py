@@ -16,7 +16,7 @@ class RedisMessageQueue:
         logging.debug(f"Message '{message}' added to the Redis queue.")
 
     async def subscribe(self, handler):
-        """Subscribe to the Redis queue and process messages."""
+        """Subscribe to the Redis queue and retrieve messages."""
         logging.debug("Starting subscription to Redis queue...")
         while True:
             try:

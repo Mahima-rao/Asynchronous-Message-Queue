@@ -40,7 +40,7 @@ This solution consists of:
 5. Service B will be available at http://127.0.0.1:8001.
 
 **Service A - Endpoint**:
-- POST /service_a/publish/
+- POST /publish/
 
 **Service B**:
 - Listens to the shared queue and processes messages in the background.
