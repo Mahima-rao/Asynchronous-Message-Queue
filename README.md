@@ -23,7 +23,7 @@ This solution consists of:
    - git clone https://github.com/Mahima-rao/stryker.git
    - cd stryker-assignment
 2. **Create a virtual environment**:
-   - .\venv\Scripts\activate
+   - python -m venv venv
 3. **Activate the virtual environment**:
    - .\venv\Scripts\activate
 4. **Install depencies**:
