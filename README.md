@@ -21,7 +21,6 @@ This solution consists of:
 
 1. **Clone the repository**:
    - git clone https://github.com/Mahima-rao/stryker.git
-   - cd stryker-assignment
 2. **Create a virtual environment**:
    - python -m venv venv
 3. **Activate the virtual environment**:
