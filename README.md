@@ -1,4 +1,4 @@
-# Stryker Technical Challenge: Asynchronous Message Queue Abstraction Library
+# Asynchronous Message Queue Abstraction Library
 
 This repository contains a solution for the Stryker technical challenge. It implements an asynchronous message queue abstraction and two FastAPI microservices that interact through the queue.
 
